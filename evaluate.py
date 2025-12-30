@@ -54,11 +54,11 @@ precision = precision_score(y_true, y_pred, average="weighted")
 recall = recall_score(y_true, y_pred, average="weighted")
 f1 = f1_score(y_true, y_pred, average="weighted")
 
-print("\n📊 Model Performans Sonuçları\n")
+print("\nModel Performans Sonuçları\n")
 print(f"Accuracy : {accuracy:.4f}")
 print(f"Precision: {precision:.4f}")
 print(f"Recall   : {recall:.4f}")
 print(f"F1-score : {f1:.4f}")
 
-print("\n📋 Detaylı Sınıflandırma Raporu:\n")
+print("\nDetaylı Sınıflandırma Raporu:\n")
 print(classification_report(y_true, y_pred, target_names=labels))
