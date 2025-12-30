@@ -1,0 +1,8 @@
+.DS_Store
+flowers_test/
+flowers_vit_model_cikti/
+egitimbeyza/
+__pycache__/
+*.pyc
+venv/
+
