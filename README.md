@@ -1,6 +1,6 @@
 
 # Sektör Kampüste 2025-226 Güz Dönemi 
-Yapay Zeka ve Bulut Bilişim Teknolojileri 
+Bulut Bilişim ve Yapay Zeka Teknolojileri 
 Proje Ödevi
 
 Hazırlayan : Elif Beyza Beyaz 220502033
