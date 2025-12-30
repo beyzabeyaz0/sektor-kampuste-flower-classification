@@ -20,7 +20,7 @@ OUTPUT_DIR = "./flowers_vit_model_cikti"
 EPOCHS = 10
 BATCH_SIZE = 16 
 
-# --- 2. GPU (MPS) KONTROLÜ ---
+# --- 2. GPU KONTROLÜ ---
 if torch.backends.mps.is_available():
     device = torch.device("mps")
     print("\nMac GPU (MPS) Tespit Edildi. Eğitim GPU üzerinde yapılacak.")
@@ -28,13 +28,13 @@ else:
     device = torch.device("cpu")
     print("\nMPS bulunamadı, işlemler CPU üzerinden devam edecek.")
 
-# --- 3. VERİ SETİNİ YÜKLEME (KRİTİK DÜZELTME) ---
+# --- 3. VERİ SETİNİ YÜKLEME ---
 print(f"📂 Veri seti okunuyor: {DATASET_PATH}")
 
-# 'split="train"' parametresi EmptyDatasetError hatasını çözer.
+
 try:
     ds = load_dataset("imagefolder", data_dir=DATASET_PATH, split="train")
-    # Veriyi %80 Eğitim, %20 Test olarak bölüyoruz
+    # Veriyi %80 Eğitim, %20 Test olarak bölünüyor
     ds = ds.train_test_split(test_size=0.2, seed=42)
 except Exception as e:
     print(f"❌ HATA: Veri yüklenemedi. Klasör yapısını kontrol edin.\nDetay: {e}")
@@ -50,7 +50,6 @@ print(f"Sınıflar: {labels}")
 processor = ViTImageProcessor.from_pretrained(MODEL_NAME)
 
 def transform(example_batch):
-    # 'imagefolder' ile yüklenen verilerde resim sütunu 'image' adını alır.
     inputs = processor([x.convert("RGB") for x in example_batch['image']], return_tensors='pt')
     inputs['labels'] = example_batch['label']
     return inputs
@@ -83,8 +82,8 @@ training_args = TrainingArguments(
     eval_strategy="epoch",       
     save_strategy="epoch",
     load_best_model_at_end=True,
-    fp16=False,                  # Mac MPS'de kararlılık için False (Önemli)
-    dataloader_num_workers=0,    # Mac'te MPS çakışmasını önlemek için 0
+    fp16=False,                 
+    dataloader_num_workers=0,    
     logging_steps=10,
     report_to="none"
 )
@@ -107,10 +106,3 @@ trainer.train()
 trainer.save_model(OUTPUT_DIR)
 processor.save_pretrained(OUTPUT_DIR)
 print(f"\nModel başarıyla kaydedildi: {OUTPUT_DIR}")
-
-# --- 10. NİHAİ DEĞERLENDİRME ---
-print("\nTest Seti Üzerindeki Nihai Değerlendirme Sonuçları")
-metrics = trainer.evaluate()
-
-for key, value in metrics.items():
-    print(f"{key}: {value:.4f}")
